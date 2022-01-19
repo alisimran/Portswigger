@@ -1,0 +1,8 @@
+LAB DESCRIPTION
+an application that lets users log in with a username and password
+query: SELECT * FROM users WHERE username = 'administrator' AND password = 'sdhf'
+
+GOAL
+To login as administrator
+
+ANALYSIS
